@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'vendors.apps.VendorConfig', # new created app name 
-
+    'purchase_orders.apps.PurchaseOrdersConfig', # when you create new app add here
+    'vendor_performance.apps.VendorPerformanceConfig',
 ]
 
 MIDDLEWARE = [
