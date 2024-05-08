@@ -9,11 +9,13 @@ import logging
 from vendor_performance.performance_metrics import generatePerformanceMetrics 
 import random 
 import string
-
+from django.utils.decorators import method_decorator
+from vms.auth_middleware import check_api_key
 
 logger = logging.getLogger(__name__)
 # Create your views here.
 
+@method_decorator(check_api_key, name='dispatch')
 class PurchaseOrderView(APIView):
     def get(self,request, id=None):
         try:

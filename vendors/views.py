@@ -14,6 +14,8 @@ import logging
 import random 
 import string
 
+from django.utils.decorators import method_decorator
+from vms.auth_middleware import check_api_key
 
 logger = logging.getLogger(__name__)
 
@@ -22,6 +24,7 @@ logger = logging.getLogger(__name__)
   
 # class based view
 
+@method_decorator(check_api_key, name='dispatch')
 class VendorsView(APIView):
     
         # def get(self, request, id, *args, **kwargs):
@@ -82,6 +85,9 @@ class VendorsView(APIView):
                 return Response({'status': 'error', 'data': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 
+
+
+@method_decorator(check_api_key, name='dispatch')
 class VendorPerformanceView(APIView):
     def get(self, request, id):
         try:

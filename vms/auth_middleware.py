@@ -1,15 +1,23 @@
-
+from functools import wraps
 from django.http import JsonResponse
 
-def api_key_required(view_func):
-    def wrapped(request, *args, **kwargs):
-        # Retrieve API key from request headers or query parameters
-        api_key = request.headers.get('x-api-key') or request.GET.get('api_key')
+SECRET_KEY = 'secretKey'  # better to store sensitive information in .env file
+
+def check_api_key(view_func):
+    @wraps(view_func)
+    def _wrapped_view(request, *args, **kwargs):
         
-        # Validate the API key
-        if api_key != 'secretKey':  # Replace 'YOUR_API_KEY' with your actual API key
-            return JsonResponse({'error': 'Invalid API Key'}, status=403)
         
-        # Call the view function if the API key is valid
+        # Get the API key from the request headers
+        api_key = request.headers.get('x-api-key')
+        
+        # Check if the API key is valid
+        if api_key != SECRET_KEY:
+            return JsonResponse({'error': 'Invalid API key'}, status=403)
+        
+        # If the API key is valid, proceed to the view
         return view_func(request, *args, **kwargs)
-    return wrapped
+    
+    return _wrapped_view
+
+
